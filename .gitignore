@@ -33,6 +33,10 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
+# Licensed Dazzle Pro source assets. Keep the complete folder local and out of
+# the public repository; the compiled application embeds the required icons.
+/Batch Scripter/dazzleicons/
+
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot

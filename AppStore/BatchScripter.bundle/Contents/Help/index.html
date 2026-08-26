@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Batch Scripter Help</title>
+  <style>
+    body { max-width: 860px; margin: 40px auto; padding: 0 24px; font: 16px/1.55 "Segoe UI", sans-serif; color: #202020; }
+    h1, h2 { color: #002147; }
+    code, pre { font-family: Consolas, monospace; }
+    pre { padding: 14px; overflow: auto; background: #f3f3f3; border-left: 4px solid #0078d4; }
+    .note { padding: 12px 14px; background: #eef6fc; border: 1px solid #b8d9f2; }
+  </style>
+</head>
+<body>
+  <h1>Batch Scripter for AutoCAD</h1>
+  <p>Batch Scripter runs the same AutoCAD script against an ordered list of drawing files.</p>
+
+  <h2>Start the app</h2>
+  <p>At the AutoCAD command line, enter <code>OW:BatchScripter</code>.</p>
+
+  <h2>Run a batch</h2>
+  <ol>
+    <li>Select <strong>Add Drawings</strong> and choose one or more DWG or DWT files.</li>
+    <li>Enter script content or select <strong>Add Script</strong> to append an SCR/TXT file.</li>
+    <li>Choose whether changes should be saved.</li>
+    <li>Select <strong>Run Script</strong> and confirm the operation.</li>
+  </ol>
+
+  <div class="note">
+    Drawing order is preserved. Selected drawings must be closed before the batch begins.
+    Test scripts on copies of drawings before using them on production files.
+  </div>
+
+  <h2>Blank lines and Enter</h2>
+  <p>A blank line following a command response is preserved as an Enter keypress. Blank visual
+     spacing immediately after an AutoLISP expression is ignored, and trailing blank lines are removed.</p>
+  <pre>(command "TILEMODE" "1")
+_.ERASE
+_ALL
+
+(command "_.REGEN")</pre>
+
+  <h2>Logs and temporary files</h2>
+  <p>Error logs are written under <code>%LOCALAPPDATA%\Batch Scripter\Logs</code>.
+     Generated scripts are written under <code>%TEMP%\BatchScripter</code> and stale scripts are cleaned automatically.</p>
+
+  <h2>Support</h2>
+  <p><a href="https://github.com/OliversDev/Batch-Scripter-App-for-AutoCAD">Project and support page</a></p>
+  <p>Autodesk and AutoCAD are registered trademarks of Autodesk, Inc. This application is not
+     affiliated with, endorsed by, sponsored by, or supported by Autodesk, Inc.</p>
+</body>
+</html>

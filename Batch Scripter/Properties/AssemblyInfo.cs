@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Batch Scripter App for AutoCAD")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Runs AutoCAD scripts across an ordered list of drawings.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Oliver Wackenreuther")]
 [assembly: AssemblyProduct("Batch Scripter App for AutoCAD")]
-[assembly: AssemblyCopyright("Copyright © Oliver Wackenreuther 2024")]
+[assembly: AssemblyCopyright("Copyright © Oliver Wackenreuther 2024-2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]

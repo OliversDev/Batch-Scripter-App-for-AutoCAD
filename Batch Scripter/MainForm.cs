@@ -1,56 +1,75 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
-using Autodesk.AutoCAD.EditorInput;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using AcApp = Autodesk.AutoCAD.ApplicationServices.Application;
 
 namespace Batch_Scripter
 {
     public partial class MainForm : Form
     {
-        private List<string> drawingFiles;
+        private readonly List<string> drawingFiles = new List<string>();
+        private readonly ToolTip toolTip = new ToolTip();
 
         public MainForm()
         {
             InitializeComponent();
-            drawingFiles = new List<string>();
-            ApplyDarkTheme();
+            BatchScripterTheme.Apply(this, btnRunScript, footerPanel);
+            ConfigureFooterLinks();
+            TryApplyWindowIcon();
+            BatchScriptBuilder.DeleteStaleScripts(TimeSpan.FromDays(7));
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            try
+            {
+                Document activeDocument = AcApp.DocumentManager.MdiActiveDocument;
+                if (activeDocument != null)
+                    activeDocument.Window.Focus();
+                else
+                    AcApp.MainWindow.Focus();
+            }
+            catch
+            {
+                // Focus recovery must never prevent the form from closing.
+            }
         }
 
         private void btnBrowseDrawings_Click(object sender, EventArgs e)
         {
             try
             {
-                using (OpenFileDialog openFileDialog = new OpenFileDialog
+                using (OpenFileDialog dialog = new OpenFileDialog())
                 {
-                    Filter = "Drawing files (*.dwg;*.dwt)|*.dwg;*.dwt|All files (*.*)|*.*",
-                    Multiselect = true
-                })
-                {
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    dialog.Filter = "AutoCAD drawings and templates (*.dwg;*.dwt)|*.dwg;*.dwt|All files (*.*)|*.*";
+                    dialog.Multiselect = true;
+                    dialog.Title = "Add Drawings";
+
+                    if (dialog.ShowDialog(this) != DialogResult.OK)
+                        return;
+
+                    foreach (string file in dialog.FileNames)
                     {
-                        foreach (string file in openFileDialog.FileNames)
+                        string fullPath = Path.GetFullPath(file);
+                        if (drawingFiles.Any(existing =>
+                            string.Equals(existing, fullPath, StringComparison.OrdinalIgnoreCase)))
                         {
-                            if (!drawingFiles.Contains(file))
-                            {
-                                drawingFiles.Add(file);
-                                listBoxDrawings.Items.Add(file);
-                            }
+                            continue;
                         }
+
+                        drawingFiles.Add(fullPath);
+                        listBoxDrawings.Items.Add(fullPath);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ShowError("Error browsing drawings", ex);
+                ShowError("Unable to add drawings", ex);
             }
         }
 
@@ -58,174 +77,179 @@ namespace Batch_Scripter
         {
             try
             {
-                while (listBoxDrawings.SelectedItems.Count > 0)
+                foreach (object item in listBoxDrawings.SelectedItems.Cast<object>().ToList())
                 {
-                    string selectedFile = listBoxDrawings.SelectedItems[0].ToString();
-                    drawingFiles.Remove(selectedFile);
-                    listBoxDrawings.Items.Remove(selectedFile);
+                    string file = item.ToString();
+                    drawingFiles.RemoveAll(existing =>
+                        string.Equals(existing, file, StringComparison.OrdinalIgnoreCase));
+                    listBoxDrawings.Items.Remove(item);
                 }
             }
             catch (Exception ex)
             {
-                ShowError("Error removing drawings", ex);
+                ShowError("Unable to remove drawings", ex);
             }
         }
 
         private void btnBrowseScript_Click(object sender, EventArgs e)
         {
-            BrowseScriptFile();
-        }
-
-        private async void btnRunScript_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Do you want to run the script?", "Run Script", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                string tempScriptFile = Path.Combine(Path.GetTempPath(), $"BatchScripter_Script_{Guid.NewGuid()}.scr");
-                try
-                {
-                    await Task.Run(() =>
-                    {
-                        using (StreamWriter writer = new StreamWriter(tempScriptFile))
-                        {
-                           // writer.WriteLine("(setq originalSDI (getvar \"SDI\"))");
-                            writer.WriteLine("(setvar \"SDI\" 1)");
-
-                            foreach (string drawingFile in drawingFiles)
-                            {
-                                try
-                                {
-                                    if (chkSaveDrawings.InvokeRequired)
-                                    {
-                                        chkSaveDrawings.Invoke((Action)(() =>
-                                        {
-                                            if (chkSaveDrawings.Checked)
-                                            {
-                                                writer.WriteLine($"(command \"_.OPEN\" \"{EscapePath(drawingFile)}\")");
-                                            }
-                                            else
-                                            {
-                                                writer.WriteLine($"(command \"_.OPEN\" \"{EscapePath(drawingFile)}\" \"READONLY\")");
-                                            }
-                                        }));
-                                    }
-
-                                    string[] scriptLines = textBoxContents.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-                                    foreach (string line in scriptLines)
-                                    {
-                                        writer.WriteLine(line);
-                                    }
-
-                                    if (chkSaveDrawings.Checked)
-                                    {
-                                        writer.WriteLine($"(command \"_.SAVE\" \"{EscapePath(drawingFile)}\")");
-                                    }
-                                    //writer.WriteLine("(command \"_.CLOSE\" \"No\")");
-                                }
-                                catch (Exception ex)
-                                {
-                                    Invoke((Action)(() =>
-                                    {
-                                        MessageBox.Show($"Error processing {drawingFile}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        LogError($"Error processing {drawingFile}: {ex.Message}");
-                                    }));
-                                }
-                            }
-
-                            writer.WriteLine("(setvar \"SDI\" 0)");
-                            writer.WriteLine("(command \"_.CLOSE\" \"No\")");
-                        }
-
-                        RunScriptFile(tempScriptFile);
-                    });
-
-                    // Close the Batch Script dialog
-                    this.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"An error occurred while creating the script file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogError($"Error creating script file: {ex.Message}");
-                }
-            }
-        }
-
-        private void RunScriptFile(string scriptFilePath)
-        {
             try
             {
-                Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-                Editor ed = doc.Editor;
-                string command = $"(command \"_.SCRIPT\" \"{EscapePath(scriptFilePath)}\")\n";
-                ed.Document.SendStringToExecute(command, true, false, false);
+                using (OpenFileDialog dialog = new OpenFileDialog())
+                {
+                    dialog.Filter = "AutoCAD scripts (*.scr)|*.scr|Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                    dialog.Multiselect = false;
+                    dialog.Title = "Add Script";
+
+                    if (dialog.ShowDialog(this) != DialogResult.OK)
+                        return;
+
+                    string content = File.ReadAllText(dialog.FileName);
+                    if (textBoxContents.TextLength > 0 &&
+                        !textBoxContents.Text.EndsWith(Environment.NewLine, StringComparison.Ordinal))
+                    {
+                        textBoxContents.AppendText(Environment.NewLine);
+                    }
+
+                    textBoxContents.AppendText(content);
+                }
             }
             catch (Exception ex)
             {
-                ShowError("Error running the script file", ex);
+                ShowError("Unable to add the script", ex);
             }
         }
 
+        private void btnRunScript_Click(object sender, EventArgs e)
+        {
+            if (drawingFiles.Count == 0)
+            {
+                ShowMessage("No Drawings Selected",
+                    "Add one or more drawing files before running the script.",
+                    MessageBoxIcon.Information);
+                return;
+            }
 
-        private void BrowseScriptFile()
+            if (string.IsNullOrWhiteSpace(textBoxContents.Text))
+            {
+                ShowMessage("No Script Entered",
+                    "Add or enter a script before running the batch.",
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            List<string> missingFiles = drawingFiles.Where(file => !File.Exists(file)).ToList();
+            if (missingFiles.Count > 0)
+            {
+                ShowMessage("Drawing Not Found",
+                    "The following drawing files could not be found:" + Environment.NewLine +
+                    Environment.NewLine + string.Join(Environment.NewLine, missingFiles),
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            List<string> openDrawings = GetOpenBatchDrawings();
+            if (openDrawings.Count > 0)
+            {
+                ShowMessage("Drawings Already Open",
+                    "Close these drawings before starting the batch:" + Environment.NewLine +
+                    Environment.NewLine + string.Join(Environment.NewLine, openDrawings),
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            string saveMessage = chkSaveDrawings.Checked
+                ? "Changes will be saved."
+                : "Changes will be discarded when each drawing closes.";
+
+            DialogResult result = MessageBox.Show(
+                this,
+                "Run the script on " + drawingFiles.Count + " drawing(s)?" +
+                Environment.NewLine + Environment.NewLine + saveMessage,
+                "Run Batch Script",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2);
+
+            if (result != DialogResult.Yes)
+                return;
+
+            try
+            {
+                // Build the complete script synchronously on AutoCAD's UI thread. The
+                // previous Task.Run implementation read WinForms controls and invoked
+                // AutoCAD APIs from a worker thread, which is not supported.
+                string scriptFile = BatchScriptBuilder.CreateTemporaryScript(
+                    drawingFiles,
+                    textBoxContents.Text,
+                    chkSaveDrawings.Checked);
+
+                Document activeDocument = AcApp.DocumentManager.MdiActiveDocument;
+                if (activeDocument == null)
+                    throw new InvalidOperationException("No active AutoCAD drawing is available.");
+
+                // Invoke SCRIPT directly. Avoid wrapping it in an AutoLISP (command)
+                // expression, because extra line terminators can be interpreted as
+                // repeated Enter presses and can relaunch the previous command/help.
+                string command = "_.SCRIPT \"" + scriptFile + "\" ";
+
+                Hide();
+                activeDocument.Window.Focus();
+                activeDocument.SendStringToExecute(command, true, false, false);
+                Close();
+            }
+            catch (Exception ex)
+            {
+                Show();
+                ShowError("Unable to start the batch script", ex);
+            }
+        }
+
+        private List<string> GetOpenBatchDrawings()
+        {
+            HashSet<string> openFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (Document document in AcApp.DocumentManager.Cast<Document>())
+            {
+                try
+                {
+                    openFiles.Add(Path.GetFullPath(document.Name));
+                }
+                catch
+                {
+                    openFiles.Add(document.Name);
+                }
+            }
+
+            return drawingFiles.Where(file => openFiles.Contains(Path.GetFullPath(file))).ToList();
+        }
+
+        private void ConfigureFooterLinks()
+        {
+            toolTip.SetToolTip(GitHub, "Oliver's GitHub");
+            toolTip.SetToolTip(LinkedIn, "Oliver Wackenreuther on LinkedIn");
+            toolTip.SetToolTip(Logo, "Batch Scripter");
+            GitHub.Cursor = Cursors.Hand;
+            LinkedIn.Cursor = Cursors.Hand;
+        }
+
+        private void TryApplyWindowIcon()
         {
             try
             {
-                using (OpenFileDialog openFileDialog = new OpenFileDialog
+                using (Stream iconStream = typeof(MainForm).Assembly
+                    .GetManifestResourceStream("Batch_Scripter.Logo_BW_Small.ico"))
                 {
-                    Filter = "Script files (*.scr;*.txt)|*.scr;*.txt|All files (*.*)|*.*",
-                    Multiselect = false
-                })
-                {
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    if (iconStream != null)
                     {
-                        string fileContent = File.ReadAllText(openFileDialog.FileName);
-                        textBoxContents.AppendText(fileContent + Environment.NewLine);
+                        using (System.Drawing.Icon sourceIcon = new System.Drawing.Icon(iconStream))
+                            Icon = (System.Drawing.Icon)sourceIcon.Clone();
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                ShowError("Error browsing scripts", ex);
-            }
-        }
-
-        private string EscapePath(string path)
-        {
-            return path.Replace("\\", "\\\\");
-        }
-
-        private void ShowError(string message, Exception ex)
-        {
-            MessageBox.Show($"{message}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            LogError($"{message}: {ex.Message}");
-        }
-
-        private void LogError(string message)
-        {
-            try
-            {
-                string logFilePath = Path.Combine(Path.GetTempPath(), $"BatchScripter_ErrorLog_{Guid.NewGuid()}.log");
-                File.AppendAllText(logFilePath, $"{DateTime.Now}: {message}{Environment.NewLine}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error logging the error: {ex.Message}", "Logging Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void ApplyDarkTheme()
-        {
-            this.BackColor = System.Drawing.Color.FromArgb(24, 24, 24);
-            this.ForeColor = System.Drawing.Color.White;
-
-            foreach (Control control in this.Controls)
-            {
-                //if (control is Button || control is CheckBox || control is Label || control is TextBox || control is ListBox)
-                if (control is Button || control is TextBox || control is ListBox)
-                {
-                    control.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
-                    control.ForeColor = System.Drawing.Color.White;
-                }
+                // The form remains usable if the optional icon cannot be loaded.
             }
         }
 
@@ -254,7 +278,7 @@ namespace Batch_Scripter
             OpenUrl("https://ca.linkedin.com/in/oliverwackenreuther");
         }
 
-        private void OpenUrl(string url)
+        private static void OpenUrl(string url)
         {
             try
             {
@@ -262,7 +286,43 @@ namespace Batch_Scripter
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Unable to open link. {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unable to open the link: " + ex.Message,
+                    "Batch Scripter - Link Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void ShowMessage(string title, string message, MessageBoxIcon icon)
+        {
+            MessageBox.Show(this, message, "Batch Scripter - " + title,
+                MessageBoxButtons.OK, icon);
+        }
+
+        private void ShowError(string message, Exception ex)
+        {
+            string details = message + ": " + ex.Message;
+            LogError(details);
+            ShowMessage("Error", details, MessageBoxIcon.Error);
+        }
+
+        private static void LogError(string message)
+        {
+            try
+            {
+                string logFolder = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Batch Scripter",
+                    "Logs");
+                Directory.CreateDirectory(logFolder);
+                string logPath = Path.Combine(logFolder,
+                    "BatchScripter-" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+                File.AppendAllText(logPath,
+                    DateTime.Now.ToString("O") + " " + message + Environment.NewLine);
+            }
+            catch
+            {
+                // Logging must not mask the original failure.
             }
         }
     }

@@ -63,26 +63,6 @@ namespace Batch_Scripter.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap github_mark_white {
-            get {
-                object obj = ResourceManager.GetObject("github-mark-white", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap LI_In_Bug {
-            get {
-                object obj = ResourceManager.GetObject("LI-In-Bug", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Logo_BW_NOBG {
             get {
                 object obj = ResourceManager.GetObject("Logo_BW-NOBG", resourceCulture);

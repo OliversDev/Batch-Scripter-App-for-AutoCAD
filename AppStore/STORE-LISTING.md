@@ -10,7 +10,7 @@ Batch Scripter is a focused AutoCAD productivity tool for applying the same SCR 
 
 The app preserves drawing order and supports command scripts that require a blank line as an Enter response. It also removes trailing editor whitespace that can unintentionally repeat the previous AutoCAD command. Before execution, Batch Scripter checks for missing files and drawings that are already open.
 
-The interface follows AutoCAD's light or dark theme and intentionally stays simple: drawing selection, script content, save control, and one Run action.
+The interface follows the Windows light or dark application theme and intentionally stays simple: drawing selection, script content, save control, and one Run action.
 
 ## Commands
 

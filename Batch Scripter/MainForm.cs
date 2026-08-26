@@ -17,7 +17,13 @@ namespace Batch_Scripter
         public MainForm()
         {
             InitializeComponent();
-            BatchScripterTheme.Apply(this, btnRunScript, footerPanel);
+            BatchScripterTheme.Apply(
+                this,
+                btnRunScript,
+                footerPanel,
+                Logo,
+                GitHub,
+                LinkedIn);
             ConfigureFooterLinks();
             TryApplyWindowIcon();
             BatchScriptBuilder.DeleteStaleScripts(TimeSpan.FromDays(7));
@@ -46,6 +52,8 @@ namespace Batch_Scripter
             {
                 using (OpenFileDialog dialog = new OpenFileDialog())
                 {
+                    dialog.AutoUpgradeEnabled = true;
+                    dialog.CheckFileExists = true;
                     dialog.Filter = "AutoCAD drawings and templates (*.dwg;*.dwt)|*.dwg;*.dwt|All files (*.*)|*.*";
                     dialog.Multiselect = true;
                     dialog.Title = "Add Drawings";
@@ -97,6 +105,8 @@ namespace Batch_Scripter
             {
                 using (OpenFileDialog dialog = new OpenFileDialog())
                 {
+                    dialog.AutoUpgradeEnabled = true;
+                    dialog.CheckFileExists = true;
                     dialog.Filter = "AutoCAD scripts (*.scr)|*.scr|Text files (*.txt)|*.txt|All files (*.*)|*.*";
                     dialog.Multiselect = false;
                     dialog.Title = "Add Script";
@@ -162,7 +172,7 @@ namespace Batch_Scripter
                 ? "Changes will be saved."
                 : "Changes will be discarded when each drawing closes.";
 
-            DialogResult result = MessageBox.Show(
+            DialogResult result = ThemedMessageBox.Show(
                 this,
                 "Run the script on " + drawingFiles.Count + " drawing(s)?" +
                 Environment.NewLine + Environment.NewLine + saveMessage,
@@ -188,10 +198,11 @@ namespace Batch_Scripter
                 if (activeDocument == null)
                     throw new InvalidOperationException("No active AutoCAD drawing is available.");
 
-                // Invoke SCRIPT directly. Avoid wrapping it in an AutoLISP (command)
-                // expression, because extra line terminators can be interpreted as
-                // repeated Enter presses and can relaunch the previous command/help.
-                string command = "_.SCRIPT \"" + scriptFile + "\" ";
+                // SCRIPT normally opens a file picker while FILEDIA is enabled. The
+                // proven Batch Tool launcher supplies the path through AutoLISP so
+                // the user's FILEDIA setting does not need to be changed. Do not add
+                // trailing whitespace: it becomes another Enter after SCRIPT starts.
+                string command = BuildScriptLauncher(scriptFile);
 
                 Hide();
                 activeDocument.Window.Focus();
@@ -203,6 +214,14 @@ namespace Batch_Scripter
                 Show();
                 ShowError("Unable to start the batch script", ex);
             }
+        }
+
+        private static string BuildScriptLauncher(string scriptFile)
+        {
+            string autoLispPath = scriptFile
+                .Replace("\\", "\\\\")
+                .Replace("\"", "\\\"");
+            return "(command \"_.SCRIPT\" \"" + autoLispPath + "\")";
         }
 
         private List<string> GetOpenBatchDrawings()
@@ -278,7 +297,7 @@ namespace Batch_Scripter
             OpenUrl("https://ca.linkedin.com/in/oliverwackenreuther");
         }
 
-        private static void OpenUrl(string url)
+        private void OpenUrl(string url)
         {
             try
             {
@@ -286,7 +305,9 @@ namespace Batch_Scripter
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to open the link: " + ex.Message,
+                ThemedMessageBox.Show(
+                    this,
+                    "Unable to open the link: " + ex.Message,
                     "Batch Scripter - Link Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -295,7 +316,7 @@ namespace Batch_Scripter
 
         private void ShowMessage(string title, string message, MessageBoxIcon icon)
         {
-            MessageBox.Show(this, message, "Batch Scripter - " + title,
+            ThemedMessageBox.Show(this, message, "Batch Scripter - " + title,
                 MessageBoxButtons.OK, icon);
         }
 

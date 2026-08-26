@@ -193,7 +193,6 @@
             //
             // GitHub
             //
-            this.GitHub.Image = global::Batch_Scripter.Properties.Resources.github_mark_white;
             this.GitHub.Location = new System.Drawing.Point(71, 15);
             this.GitHub.Name = "GitHub";
             this.GitHub.Size = new System.Drawing.Size(30, 30);
@@ -203,7 +202,6 @@
             //
             // LinkedIn
             //
-            this.LinkedIn.Image = global::Batch_Scripter.Properties.Resources.LI_In_Bug;
             this.LinkedIn.Location = new System.Drawing.Point(109, 15);
             this.LinkedIn.Name = "LinkedIn";
             this.LinkedIn.Size = new System.Drawing.Size(30, 30);

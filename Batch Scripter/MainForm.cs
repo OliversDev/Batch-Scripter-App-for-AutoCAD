@@ -201,12 +201,15 @@ namespace Batch_Scripter
                 // SCRIPT normally opens a file picker while FILEDIA is enabled. The
                 // proven Batch Tool launcher supplies the path through AutoLISP so
                 // the user's FILEDIA setting does not need to be changed. Do not add
-                // trailing whitespace: it becomes another Enter after SCRIPT starts.
+                // a trailing space; the single carriage return below submits it.
                 string command = BuildScriptLauncher(scriptFile);
 
                 Hide();
                 activeDocument.Window.Focus();
-                activeDocument.SendStringToExecute(command, true, false, false);
+                // Submit the complete AutoLISP expression with exactly one Enter.
+                // The carriage return executes the launcher; it is not forwarded as
+                // an extra blank line to the generated script.
+                activeDocument.SendStringToExecute(command + "\r", true, false, false);
                 Close();
             }
             catch (Exception ex)

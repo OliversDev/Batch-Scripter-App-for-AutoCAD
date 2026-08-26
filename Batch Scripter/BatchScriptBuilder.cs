@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Batch_Scripter
 {
     internal static class BatchScriptBuilder
     {
-        private const string ScriptPrefix = "BatchScripter_";
+        private const string ScriptPrefix = "BS_";
+        private const string LegacyScriptPrefix = "BatchScripter_";
 
         public static string CreateTemporaryScript(
             IEnumerable<string> drawingFiles,
@@ -17,9 +19,11 @@ namespace Batch_Scripter
             string folder = Path.Combine(Path.GetTempPath(), "BatchScripter");
             Directory.CreateDirectory(folder);
 
-            string path = Path.Combine(folder,
-                ScriptPrefix + DateTime.Now.ToString("yyyyMMdd-HHmmss") + "-" +
-                Guid.NewGuid().ToString("N") + ".scr");
+            string uniqueSuffix = Guid.NewGuid().ToString("N").Substring(0, 8);
+            string fileName = ScriptPrefix +
+                DateTime.Now.ToString("yyyyMMdd_HHmmss") + "_" +
+                uniqueSuffix + ".scr";
+            string path = Path.Combine(folder, fileName);
 
             using (StreamWriter writer = new StreamWriter(
                 path,
@@ -96,7 +100,11 @@ namespace Batch_Scripter
                     return;
 
                 DateTime cutoff = DateTime.UtcNow.Subtract(maximumAge);
-                foreach (string file in Directory.GetFiles(folder, ScriptPrefix + "*.scr"))
+                IEnumerable<string> scriptFiles =
+                    Directory.GetFiles(folder, ScriptPrefix + "*.scr")
+                        .Concat(Directory.GetFiles(folder, LegacyScriptPrefix + "*.scr"));
+
+                foreach (string file in scriptFiles)
                 {
                     try
                     {

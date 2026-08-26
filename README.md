@@ -1,31 +1,51 @@
 # Batch Scripter for AutoCAD
 
-Batch Scripter applies one AutoCAD script to an ordered list of DWG or DWT files. The interface is intentionally focused: add drawings, enter or append script content, choose whether to save changes, and run.
+Batch Scripter is a focused AutoCAD add-in for applying one command script to an ordered collection of drawing or template files. It provides a straightforward interface for selecting files, entering or importing script content, choosing whether changes should be saved, and running the batch.
 
 ## Features
 
-- Add and remove multiple drawing files while preserving their displayed order.
-- Enter script content directly or append an existing SCR/TXT file.
-- Save changes with `QSAVE`, or close each drawing and explicitly discard changes.
-- Preserve blank lines that represent Enter responses in command sequences.
-- Ignore leading/trailing editor spacing and visual blank lines after AutoLISP expressions.
-- Detect selected drawings that are already open or no longer exist.
-- Follow the Windows light or dark application theme, including the title bar, app dialogs, scroll bars, footer, and social icons.
+- Process multiple DWG and DWT files in the displayed order.
+- Enter script content directly or append an existing SCR or TXT file.
+- Save each processed drawing or explicitly discard its changes.
+- Preserve blank lines that represent Enter responses in AutoCAD commands.
+- Remove leading, trailing, and redundant editor spacing that could repeat a command unintentionally.
+- Detect missing files and selected drawings that are already open.
+- Follow the Windows light or dark application theme.
 
-## Use
+## Requirements
 
-1. Install the Autodesk App Store package, or place the generated `BatchScripter.bundle` under `%PROGRAMFILES%\Autodesk\ApplicationPlugins`.
-2. Start AutoCAD.
-3. Run `OW:BatchScripter`.
-4. Add drawings and script content.
-5. Choose whether to save drawing changes.
-6. Select **Run Script** and confirm.
+- AutoCAD 2026 for Windows, 64-bit
 
-Test every new script on copies of drawings before using it on production files.
+## Installation
 
-## Blank-line behaviour
+The Autodesk App Store package installs and registers the application automatically.
 
-A blank line after a command response is preserved because it represents pressing Enter in AutoCAD:
+For local bundle testing, place `BatchScripter.bundle` under:
+
+```text
+C:\Program Files\Autodesk\ApplicationPlugins
+```
+
+Restart AutoCAD and enter the following command:
+
+```text
+OW:BatchScripter
+```
+
+Developers can also load a compiled DLL directly with AutoCAD's `NETLOAD` command.
+
+## Using Batch Scripter
+
+1. Select **Add Drawings** and choose one or more DWG or DWT files.
+2. Enter script content or select **Add Script** to append an SCR or TXT file.
+3. Choose whether drawing changes should be saved.
+4. Select **Run Script**, review the confirmation, and continue.
+
+Always test new scripts on copies of drawings before using them on production files.
+
+## Script formatting
+
+Blank lines can be meaningful in an AutoCAD script because they represent pressing Enter. For example:
 
 ```text
 _.ERASE
@@ -34,35 +54,34 @@ _ALL
 (command "_.REGEN")
 ```
 
-Blank visual spacing immediately after an AutoLISP expression is ignored, and trailing blank lines are removed. This prevents an extra Enter from repeating or relaunching the previous command.
+Batch Scripter preserves required blank responses while removing trailing editor whitespace and redundant blank lines immediately following AutoLISP expressions.
+
+## Privacy
+
+Batch Scripter does not collect or transmit personal information, drawing information, script content, or usage analytics. Processing occurs locally on the user's computer.
 
 ## Development
 
-This release targets the installed AutoCAD 2026 API:
-
-| AutoCAD | Target runtime |
-| --- | --- |
-| 2026 | .NET 8 |
-
-Build the release and create the submission bundle with:
+The project targets AutoCAD 2026 and .NET 8 on Windows. Source builds require the .NET 8 SDK and the AutoCAD 2026 managed API assemblies. Build the release and prepare the application bundle from a PowerShell developer prompt:
 
 ```powershell
 .\build-app-store.ps1
 ```
 
-See [APP-STORE-READINESS.md](APP-STORE-READINESS.md) for the implementation comparison, packaging details, and release QA checklist.
-
-The build also requires the licensed Dazzle icon sources under `Batch Scripter\dazzleicons`. That complete folder is intentionally excluded from Git and must not be committed to the public repository.
-
-## Local files
-
-- Generated scripts: `%TEMP%\BatchScripter`
-- Error logs: `%LOCALAPPDATA%\Batch Scripter\Logs`
+Certain licensed visual assets required for local source builds are intentionally excluded from the public repository.
 
 ## Licence
 
-Released under the [MIT License](LICENSE.txt).
+Batch Scripter source code is released under the [MIT License](LICENSE.txt).
 
-The GitHub and LinkedIn icons are licensed Dazzle Pro assets. See [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt). The source assets are excluded from the public repository and embedded only in the compiled end product.
+### Third-party notices
+
+**Dazzle Pro Icons**  
+Copyright (c) Dazzle-UI, Inc. All Rights Reserved.  
+License: Purchased Dazzle-UI Professional Solo License
+
+Batch Scripter uses licensed Dazzle Pro icons and symbols as part of the Batch Scripter end product. The Dazzle assets are proprietary and may not be copied, extracted, reproduced, redistributed, sublicensed, resold, or reused from this site or application.
+
+<https://dazzleui.pro/>
 
 Autodesk and AutoCAD are registered trademarks of Autodesk, Inc. Batch Scripter is not affiliated with, endorsed by, sponsored by, or supported by Autodesk, Inc.

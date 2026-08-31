@@ -14,11 +14,11 @@ Batch Scripter is a focused AutoCAD add-in for applying one command script to an
 
 ## Requirements
 
-- AutoCAD 2026 for Windows, 64-bit
+- AutoCAD 2026 or AutoCAD 2027 for Windows, 64-bit
 
 ## Installation
 
-The Autodesk App Store package installs and registers the application automatically.
+The Autodesk Design and Make Marketplace package installs and registers the application automatically.
 
 For local bundle testing, place `BatchScripter.bundle` under:
 
@@ -62,10 +62,22 @@ Batch Scripter does not collect or transmit personal information, drawing inform
 
 ## Development
 
-The project targets AutoCAD 2026 and .NET 8 on Windows. Source builds require the .NET 8 SDK and the AutoCAD 2026 managed API assemblies. Build the release and prepare the application bundle from a PowerShell developer prompt:
+The project builds two release-specific assemblies from the same project:
+
+- AutoCAD 2026 using .NET 8
+- AutoCAD 2027 using .NET 10
+
+Source builds require the .NET 8 and .NET 10 SDKs and the managed API assemblies installed with both AutoCAD releases. Building the solution in Visual Studio compiles both targets. To build both targets and prepare the Marketplace bundle from a PowerShell developer prompt, run:
 
 ```powershell
 .\build-app-store.ps1
+```
+
+The compiled assemblies are written to:
+
+```text
+Batch Scripter\bin\Release\AutoCAD2026
+Batch Scripter\bin\Release\AutoCAD2027
 ```
 
 Certain licensed visual assets required for local source builds are intentionally excluded from the public repository.

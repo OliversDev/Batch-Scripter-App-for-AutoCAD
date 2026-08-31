@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- AutoCAD 2026 through Update 1.1 uses .NET 8. -->
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <!-- AutoCAD 2026 uses .NET 8; AutoCAD 2027 uses .NET 10. -->
+    <TargetFrameworks>net8.0-windows;net10.0-windows</TargetFrameworks>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
-    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == ''">C:\Program Files\Autodesk\AutoCAD 2026</AutoCADInstallDir>
+    <AutoCAD2026Dir Condition="'$(AutoCAD2026Dir)' == ''">C:\Program Files\Autodesk\AutoCAD 2026</AutoCAD2026Dir>
+    <AutoCAD2027Dir Condition="'$(AutoCAD2027Dir)' == ''">C:\Program Files\Autodesk\AutoCAD 2027</AutoCAD2027Dir>
 
     <OutputType>Library</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
@@ -21,14 +22,25 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>bin\$(Configuration)\AutoCAD2026\</OutputPath>
     <DebugType Condition="'$(Configuration)' == 'Release'">pdbonly</DebugType>
     <Optimize Condition="'$(Configuration)' == 'Release'">true</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+    <AutoCADVersion>2026</AutoCADVersion>
+    <AutoCADInstallDir>$(AutoCAD2026Dir)</AutoCADInstallDir>
+    <OutputPath>bin\$(Configuration)\AutoCAD2026\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
+    <AutoCADVersion>2027</AutoCADVersion>
+    <AutoCADInstallDir>$(AutoCAD2027Dir)</AutoCADInstallDir>
+    <OutputPath>bin\$(Configuration)\AutoCAD2027\</OutputPath>
+  </PropertyGroup>
+
   <Target Name="ValidateAutoCADReferences" BeforeTargets="ResolveReferences">
     <Error Condition="!Exists('$(AutoCADInstallDir)\AcMgd.dll')"
-           Text="AutoCAD managed API assemblies were not found in '$(AutoCADInstallDir)'. Pass -p:AutoCADInstallDir=&quot;C:\Path\To\AutoCAD&quot;." />
+           Text="AutoCAD $(AutoCADVersion) managed API assemblies were not found in '$(AutoCADInstallDir)'. Set AutoCAD$(AutoCADVersion)Dir to the correct installation folder." />
   </Target>
 
   <ItemGroup>

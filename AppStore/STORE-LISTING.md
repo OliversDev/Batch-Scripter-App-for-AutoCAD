@@ -19,6 +19,7 @@ The interface follows the Windows light or dark application theme and intentiona
 ## Supported products
 
 - AutoCAD 2026
+- AutoCAD 2027
 - Windows 64-bit
 
 ## Trial and safety note

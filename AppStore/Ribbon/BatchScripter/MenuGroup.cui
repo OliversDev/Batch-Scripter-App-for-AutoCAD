@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<MenuGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="BATCHSCRIPTER" DisplayName="Batch Scripter">
+  <MacroGroup Name="BATCHSCRIPTER_COMMANDS">
+    <MenuMacro UID="MM_BATCHSCRIPTER_OPEN">
+      <Macro type="Any">
+        <Revision MajorVersion="25" MinorVersion="1" UserVersion="0" />
+        <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
+        <Name>Batch Scripter</Name>
+        <Command>^C^COW:BatchScripter</Command>
+        <HelpString>Open Batch Scripter and run one script across an ordered drawing list.</HelpString>
+        <SmallImage Name="BatchScripter16.png" />
+        <LargeImage Name="BatchScripter32.png" />
+        <CLICommand>OW:BatchScripter</CLICommand>
+        <ToolTip />
+      </Macro>
+    </MenuMacro>
+  </MacroGroup>
+</MenuGroup>

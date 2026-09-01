@@ -16,11 +16,18 @@ The interface follows the Windows light or dark application theme and intentiona
 
 - `OW:BatchScripter` — opens Batch Scripter.
 
+After installation, Batch Scripter is also available from the **Plug-Ins** ribbon tab.
+
 ## Supported products
 
 - AutoCAD 2026
 - AutoCAD 2027
 - Windows 64-bit
+
+## Submission artwork
+
+- `Assets/BatchScripterIcon-120.png` — transparent 120 x 120 Marketplace icon
+- `Assets/BatchScripterIcon-1024.png` — transparent high-resolution source export
 
 ## Trial and safety note
 

@@ -19,6 +19,10 @@
   <!-- AutoCAD 2026 uses the .NET 8 build. -->
   <Components Description="AutoCAD 2026">
     <RuntimeRequirements OS="Win64" Platform="AutoCAD" SeriesMin="R25.1" SeriesMax="R25.1" />
+    <ComponentEntry AppName="Batch Scripter Ribbon 2026"
+                    ModuleName="./Contents/Resources/BatchScripter.cuix"
+                    AppDescription="Batch Scripter ribbon panel for AutoCAD 2026"
+                    LoadOnAutoCADStartup="True" />
     <ComponentEntry AppName="Batch Scripter 2026"
                     ModuleName="./Contents/2026/Batch Scripter App for AutoCAD.dll"
                     AppDescription="Batch Scripter for AutoCAD 2026"
@@ -32,6 +36,10 @@
   <!-- AutoCAD 2027 uses the .NET 10 build. -->
   <Components Description="AutoCAD 2027">
     <RuntimeRequirements OS="Win64" Platform="AutoCAD" SeriesMin="R26.0" SeriesMax="R26.0" />
+    <ComponentEntry AppName="Batch Scripter Ribbon 2027"
+                    ModuleName="./Contents/Resources/BatchScripter.cuix"
+                    AppDescription="Batch Scripter ribbon panel for AutoCAD 2027"
+                    LoadOnAutoCADStartup="True" />
     <ComponentEntry AppName="Batch Scripter 2027"
                     ModuleName="./Contents/2027/Batch Scripter App for AutoCAD.dll"
                     AppDescription="Batch Scripter for AutoCAD 2027"

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<RibbonRoot>
+  <RibbonPanelSourceCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <RibbonPanelSource UID="RBN_PANEL_BATCHSCRIPTER" Text="Batch Scripter" HiddenInEditor="false">
+      <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
+      <Name>Batch Scripter</Name>
+      <RibbonRow UID="RBN_ROW_BATCHSCRIPTER">
+        <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
+        <RibbonCommandButton UID="RBN_BTN_BATCHSCRIPTER_OPEN"
+                             Id="AcRibbonCommandButton"
+                             Text="Batch\nScripter"
+                             ButtonStyle="LargeWithText"
+                             MenuMacroID="MM_BATCHSCRIPTER_OPEN"
+                             KeyTip="">
+          <TooltipTitle>Batch Scripter</TooltipTitle>
+          <TooltipDescription>Run one AutoCAD script across an ordered list of drawings.</TooltipDescription>
+          <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
+        </RibbonCommandButton>
+      </RibbonRow>
+      <RibbonPanelBreak UID="RBN_BREAK_BATCHSCRIPTER" Id="AcRibbonPanelBreak">
+        <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
+      </RibbonPanelBreak>
+    </RibbonPanelSource>
+  </RibbonPanelSourceCollection>
+  <RibbonTabSourceCollection>
+    <RibbonTabSource Text="Batch Scripter"
+                     UID="RBN_TAB_BATCHSCRIPTER"
+                     IsWorkspaceDefault="true"
+                     WorkspaceBehavior="MergeOrAddTab">
+      <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
+      <Name>Batch Scripter</Name>
+      <Aliases>
+        <Alias>ID_ADDINSTAB</Alias>
+      </Aliases>
+      <RibbonPanelSourceReference UID="RBN_REF_BATCHSCRIPTER"
+                                  PanelId="RBN_PANEL_BATCHSCRIPTER"
+                                  ResizeStyle="Default">
+        <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
+      </RibbonPanelSourceReference>
+    </RibbonTabSource>
+  </RibbonTabSourceCollection>
+</RibbonRoot>

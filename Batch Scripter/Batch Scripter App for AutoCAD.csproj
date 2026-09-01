@@ -3,8 +3,9 @@
     <!-- AutoCAD 2026 uses .NET 8; AutoCAD 2027 uses .NET 10. -->
     <TargetFrameworks>net8.0-windows;net10.0-windows</TargetFrameworks>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
-    <AutoCAD2026Dir Condition="'$(AutoCAD2026Dir)' == ''">C:\Program Files\Autodesk\AutoCAD 2026</AutoCAD2026Dir>
-    <AutoCAD2027Dir Condition="'$(AutoCAD2027Dir)' == ''">C:\Program Files\Autodesk\AutoCAD 2027</AutoCAD2027Dir>
+    <!-- Command-line MSBuild properties can override these defaults for custom installations. -->
+    <AutoCAD2026Dir>C:\Program Files\Autodesk\AutoCAD 2026</AutoCAD2026Dir>
+    <AutoCAD2027Dir>C:\Program Files\Autodesk\AutoCAD 2027</AutoCAD2027Dir>
 
     <OutputType>Library</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
@@ -27,33 +28,41 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
-    <AutoCADVersion>2026</AutoCADVersion>
-    <AutoCADInstallDir>$(AutoCAD2026Dir)</AutoCADInstallDir>
     <OutputPath>bin\$(Configuration)\AutoCAD2026\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\AutoCAD2026\</IntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
-    <AutoCADVersion>2027</AutoCADVersion>
-    <AutoCADInstallDir>$(AutoCAD2027Dir)</AutoCADInstallDir>
     <OutputPath>bin\$(Configuration)\AutoCAD2027\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\AutoCAD2027\</IntermediateOutputPath>
   </PropertyGroup>
 
-  <Target Name="ValidateAutoCADReferences" BeforeTargets="ResolveReferences">
-    <Error Condition="!Exists('$(AutoCADInstallDir)\AcMgd.dll')"
-           Text="AutoCAD $(AutoCADVersion) managed API assemblies were not found in '$(AutoCADInstallDir)'. Set AutoCAD$(AutoCADVersion)Dir to the correct installation folder." />
-  </Target>
-
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
     <Reference Include="AcCoreMgd">
-      <HintPath>$(AutoCADInstallDir)\AcCoreMgd.dll</HintPath>
+      <HintPath>$(AutoCAD2026Dir)\AcCoreMgd.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="AcDbMgd">
-      <HintPath>$(AutoCADInstallDir)\AcDbMgd.dll</HintPath>
+      <HintPath>$(AutoCAD2026Dir)\AcDbMgd.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="AcMgd">
-      <HintPath>$(AutoCADInstallDir)\AcMgd.dll</HintPath>
+      <HintPath>$(AutoCAD2026Dir)\AcMgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
+    <Reference Include="AcCoreMgd">
+      <HintPath>$(AutoCAD2027Dir)\AcCoreMgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AcDbMgd">
+      <HintPath>$(AutoCAD2027Dir)\AcDbMgd.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AcMgd">
+      <HintPath>$(AutoCAD2027Dir)\AcMgd.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

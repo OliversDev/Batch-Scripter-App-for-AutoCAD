@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.bak
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -36,6 +37,10 @@ bld/
 # Licensed Dazzle Pro source assets. Keep the complete folder local and out of
 # the public repository; the compiled application embeds the required icons.
 /Batch Scripter/dazzleicons/
+
+# Local icon source and export files kept at the repository root.
+# Marketplace-ready artwork belongs under AppStore/Assets instead.
+/icon.*
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

@@ -26,7 +26,7 @@ For local bundle testing, place `BatchScripter.bundle` under:
 C:\Program Files\Autodesk\ApplicationPlugins
 ```
 
-Restart AutoCAD and enter the following command:
+Restart AutoCAD. Open the **Plug-Ins** ribbon tab and select **Batch Scripter**, or enter the following command:
 
 ```text
 OW:BatchScripter
@@ -73,12 +73,30 @@ Source builds require the .NET 8 and .NET 10 SDKs and the managed API assemblies
 .\build-app-store.ps1
 ```
 
+If the source was downloaded as a ZIP, use **Properties > Unblock** on the ZIP before extracting it. For an already extracted trusted copy, close Visual Studio and run the following command from the repository root to remove Windows' downloaded-file marker:
+
+```powershell
+Get-ChildItem -Recurse -File | Unblock-File
+```
+
+The default API locations are `C:\Program Files\Autodesk\AutoCAD 2026` and `C:\Program Files\Autodesk\AutoCAD 2027`. Custom locations can be passed to the packaging script:
+
+```powershell
+.\build-app-store.ps1 `
+  -AutoCAD2026Dir "D:\Autodesk\AutoCAD 2026" `
+  -AutoCAD2027Dir "D:\Autodesk\AutoCAD 2027"
+```
+
 The compiled assemblies are written to:
 
 ```text
 Batch Scripter\bin\Release\AutoCAD2026
 Batch Scripter\bin\Release\AutoCAD2027
 ```
+
+The packaging script also creates the required partial CUIX ribbon file from `AppStore\Ribbon\BatchScripter` and includes it in the Marketplace bundle.
+
+Marketplace artwork is maintained under `AppStore\Assets`, including the required transparent 120 x 120 PNG. The application and ribbon icons use transparent backgrounds so they remain legible with different AutoCAD and Windows themes.
 
 Certain licensed visual assets required for local source builds are intentionally excluded from the public repository.
 

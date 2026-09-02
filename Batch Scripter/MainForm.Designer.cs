@@ -175,9 +175,9 @@
             // btnRunScript
             //
             this.btnRunScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRunScript.Location = new System.Drawing.Point(805, 15);
+            this.btnRunScript.Location = new System.Drawing.Point(815, 15);
             this.btnRunScript.Name = "btnRunScript";
-            this.btnRunScript.Size = new System.Drawing.Size(145, 30);
+            this.btnRunScript.Size = new System.Drawing.Size(125, 30);
             this.btnRunScript.TabIndex = 6;
             this.btnRunScript.Text = "Run Script";
             this.btnRunScript.Click += new System.EventHandler(this.btnRunScript_Click);
@@ -227,17 +227,17 @@
             this.linkLblLicense.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
             this.linkLblLicense.Location = new System.Drawing.Point(390, 23);
             this.linkLblLicense.Name = "linkLblLicense";
-            this.linkLblLicense.Size = new System.Drawing.Size(79, 15);
+            this.linkLblLicense.Size = new System.Drawing.Size(44, 15);
             this.linkLblLicense.TabIndex = 3;
             this.linkLblLicense.TabStop = true;
-            this.linkLblLicense.Text = "MIT License ©";
+            this.linkLblLicense.Text = "License";
             this.linkLblLicense.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblLicense_LinkClicked);
             //
             // linkLblHelp
             //
             this.linkLblHelp.AutoSize = true;
             this.linkLblHelp.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
-            this.linkLblHelp.Location = new System.Drawing.Point(484, 23);
+            this.linkLblHelp.Location = new System.Drawing.Point(449, 23);
             this.linkLblHelp.Name = "linkLblHelp";
             this.linkLblHelp.Size = new System.Drawing.Size(32, 15);
             this.linkLblHelp.TabIndex = 4;

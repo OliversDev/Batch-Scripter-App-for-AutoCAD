@@ -112,9 +112,11 @@ Marketplace artwork is maintained under `AppStore\Assets`, including the require
 
 Certain licensed visual assets required for local source builds are intentionally excluded from the public repository.
 
-## Licence
+## License
 
-Batch Scripter source code is released under the [MIT License](LICENSE.txt).
+The [Batch Scripter license](LICENSE.txt) contains an application-specific
+disclaimer of warranty and limitation of liability, followed by the MIT License
+under which the source code is released.
 
 ### Third-party notices
 

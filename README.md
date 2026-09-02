@@ -60,6 +60,8 @@ Batch Scripter preserves required blank responses while removing trailing editor
 
 Batch Scripter does not collect or transmit personal information, drawing information, script content, or usage analytics. Processing occurs locally on the user's computer.
 
+See the complete [Batch Scripter Privacy Policy](PRIVACY.md) for local-file retention, third-party, support, consent, and deletion details.
+
 ## Development
 
 The project builds two release-specific assemblies from the same project:

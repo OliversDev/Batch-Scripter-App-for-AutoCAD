@@ -285,6 +285,39 @@ namespace Batch_Scripter
             OpenUrl("https://github.com/OliversDev/Batch-Scripter-App-for-AutoCAD/blob/master/LICENSE.txt");
         }
 
+        private void linkLblPrivacy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            const string onlinePolicy =
+                "https://github.com/OliversDev/Batch-Scripter-App-for-AutoCAD/blob/master/PRIVACY.md";
+
+            try
+            {
+                string assemblyDirectory = Path.GetDirectoryName(
+                    typeof(MainForm).Assembly.Location);
+
+                if (!string.IsNullOrWhiteSpace(assemblyDirectory))
+                {
+                    string localPolicy = Path.GetFullPath(Path.Combine(
+                        assemblyDirectory,
+                        "..",
+                        "Help",
+                        "privacy.html"));
+
+                    if (File.Exists(localPolicy))
+                    {
+                        OpenUrl(localPolicy);
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                // Use the public policy when the local bundle path is unavailable.
+            }
+
+            OpenUrl(onlinePolicy);
+        }
+
         private void linkLblHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             OpenUrl("https://github.com/OliversDev/Batch-Scripter-App-for-AutoCAD/blob/master/README.md");

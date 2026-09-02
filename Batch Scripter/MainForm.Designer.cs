@@ -18,6 +18,7 @@
         private System.Windows.Forms.PictureBox GitHub;
         private System.Windows.Forms.PictureBox LinkedIn;
         private System.Windows.Forms.LinkLabel linkLblLicense;
+        private System.Windows.Forms.LinkLabel linkLblPrivacy;
         private System.Windows.Forms.LinkLabel linkLblHelp;
 
         protected override void Dispose(bool disposing)
@@ -48,6 +49,7 @@
             this.GitHub = new System.Windows.Forms.PictureBox();
             this.LinkedIn = new System.Windows.Forms.PictureBox();
             this.linkLblLicense = new System.Windows.Forms.LinkLabel();
+            this.linkLblPrivacy = new System.Windows.Forms.LinkLabel();
             this.linkLblHelp = new System.Windows.Forms.LinkLabel();
             this.grpDrawings.SuspendLayout();
             this.grpScript.SuspendLayout();
@@ -153,6 +155,7 @@
             this.footerPanel.Controls.Add(this.GitHub);
             this.footerPanel.Controls.Add(this.LinkedIn);
             this.footerPanel.Controls.Add(this.linkLblLicense);
+            this.footerPanel.Controls.Add(this.linkLblPrivacy);
             this.footerPanel.Controls.Add(this.linkLblHelp);
             this.footerPanel.Location = new System.Drawing.Point(0, 590);
             this.footerPanel.Name = "footerPanel";
@@ -168,7 +171,7 @@
             this.chkSaveDrawings.Location = new System.Drawing.Point(652, 21);
             this.chkSaveDrawings.Name = "chkSaveDrawings";
             this.chkSaveDrawings.Size = new System.Drawing.Size(106, 19);
-            this.chkSaveDrawings.TabIndex = 5;
+            this.chkSaveDrawings.TabIndex = 6;
             this.chkSaveDrawings.Text = "Save drawings";
             this.chkSaveDrawings.UseVisualStyleBackColor = false;
             //
@@ -178,7 +181,7 @@
             this.btnRunScript.Location = new System.Drawing.Point(815, 15);
             this.btnRunScript.Name = "btnRunScript";
             this.btnRunScript.Size = new System.Drawing.Size(125, 30);
-            this.btnRunScript.TabIndex = 6;
+            this.btnRunScript.TabIndex = 7;
             this.btnRunScript.Text = "Run Script";
             this.btnRunScript.Click += new System.EventHandler(this.btnRunScript_Click);
             //
@@ -233,14 +236,26 @@
             this.linkLblLicense.Text = "License";
             this.linkLblLicense.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblLicense_LinkClicked);
             //
+            // linkLblPrivacy
+            //
+            this.linkLblPrivacy.AutoSize = true;
+            this.linkLblPrivacy.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
+            this.linkLblPrivacy.Location = new System.Drawing.Point(449, 23);
+            this.linkLblPrivacy.Name = "linkLblPrivacy";
+            this.linkLblPrivacy.Size = new System.Drawing.Size(44, 15);
+            this.linkLblPrivacy.TabIndex = 4;
+            this.linkLblPrivacy.TabStop = true;
+            this.linkLblPrivacy.Text = "Privacy";
+            this.linkLblPrivacy.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblPrivacy_LinkClicked);
+            //
             // linkLblHelp
             //
             this.linkLblHelp.AutoSize = true;
             this.linkLblHelp.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
-            this.linkLblHelp.Location = new System.Drawing.Point(449, 23);
+            this.linkLblHelp.Location = new System.Drawing.Point(508, 23);
             this.linkLblHelp.Name = "linkLblHelp";
             this.linkLblHelp.Size = new System.Drawing.Size(32, 15);
-            this.linkLblHelp.TabIndex = 4;
+            this.linkLblHelp.TabIndex = 5;
             this.linkLblHelp.TabStop = true;
             this.linkLblHelp.Text = "Help";
             this.linkLblHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblHelp_LinkClicked);

@@ -37,3 +37,5 @@ Always test a new script on copies of drawings. AutoCAD scripts execute commands
 ## Privacy
 
 Batch Scripter does not collect or transmit personal information or analytics. Drawing paths, script content, temporary scripts, and error logs remain on the user's computer.
+
+Privacy policy: https://github.com/OliversDev/Batch-Scripter-App-for-AutoCAD/blob/master/PRIVACY.md

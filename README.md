@@ -94,9 +94,21 @@ Batch Scripter\bin\Release\AutoCAD2026
 Batch Scripter\bin\Release\AutoCAD2027
 ```
 
-The packaging script also creates the required partial CUIX ribbon file from `AppStore\Ribbon\BatchScripter` and includes it in the Marketplace bundle.
+The packaging script creates the required partial CUIX ribbon file from `AppStore\Ribbon\BatchScripter` and stages the complete bundle under:
 
-Marketplace artwork is maintained under `AppStore\Assets`, including the required transparent 120 x 120 PNG. The application and ribbon icons use transparent backgrounds so they remain legible with different AutoCAD and Windows themes.
+```text
+AppStore\artifacts\BatchScripter.bundle
+```
+
+The Marketplace upload archive is written to:
+
+```text
+AppStore\artifacts\BatchScripter-2.0.0-Autodesk-Marketplace.zip
+```
+
+The ignored `artifacts` folder keeps generated DLLs, CUIX files, copied notices, and submission archives out of the source tree.
+
+Marketplace artwork is maintained under `AppStore\Assets`, including the required transparent 120 x 120 PNG. The ribbon uses a separate simplified icon designed specifically for AutoCAD's 16 x 16 and 32 x 32 display sizes.
 
 Certain licensed visual assets required for local source builds are intentionally excluded from the public repository.
 

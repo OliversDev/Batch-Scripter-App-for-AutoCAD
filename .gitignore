@@ -40,7 +40,16 @@ bld/
 
 # Local icon source and export files kept at the repository root.
 # Marketplace-ready artwork belongs under AppStore/Assets instead.
-/icon.*
+/icon*.*
+
+# Marketplace build staging and legacy in-tree package outputs.
+/AppStore/artifacts/
+/AppStore/BatchScripter-*-Autodesk-Marketplace.zip
+/AppStore/BatchScripter.bundle/Contents/2026/
+/AppStore/BatchScripter.bundle/Contents/2027/
+/AppStore/BatchScripter.bundle/Contents/Resources/
+/AppStore/BatchScripter.bundle/Contents/Help/LICENSE.txt
+/AppStore/BatchScripter.bundle/Contents/Help/THIRD-PARTY-NOTICES.txt
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

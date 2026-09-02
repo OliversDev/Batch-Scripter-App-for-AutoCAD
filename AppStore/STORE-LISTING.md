@@ -28,6 +28,7 @@ After installation, Batch Scripter is also available from the **Plug-Ins** ribbo
 
 - `Assets/BatchScripterIcon-120.png` — transparent 120 x 120 Marketplace icon
 - `Assets/BatchScripterIcon-1024.png` — transparent high-resolution source export
+- `Assets/BatchScripterRibbon.svg` — editable source for the simplified ribbon icon
 
 ## Trial and safety note
 

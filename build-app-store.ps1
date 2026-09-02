@@ -6,9 +6,11 @@ param(
 $ErrorActionPreference = "Stop"
 $repositoryRoot = $PSScriptRoot
 $project = Join-Path $repositoryRoot "Batch Scripter\Batch Scripter App for AutoCAD.csproj"
-$bundle = Join-Path $repositoryRoot "AppStore\BatchScripter.bundle"
+$bundleTemplate = Join-Path $repositoryRoot "AppStore\BatchScripter.bundle"
+$artifactsRoot = Join-Path $repositoryRoot "AppStore\artifacts"
+$bundle = Join-Path $artifactsRoot "BatchScripter.bundle"
 $ribbonSource = Join-Path $repositoryRoot "AppStore\Ribbon\BatchScripter"
-$outputZip = Join-Path $repositoryRoot "AppStore\BatchScripter-2.0.0-Autodesk-Marketplace.zip"
+$outputZip = Join-Path $artifactsRoot "BatchScripter-2.0.0-Autodesk-Marketplace.zip"
 
 function Assert-AutoCADApi {
     param(
@@ -26,6 +28,18 @@ function Assert-AutoCADApi {
 
 Assert-AutoCADApi -Version "2026" -Directory $AutoCAD2026Dir
 Assert-AutoCADApi -Version "2027" -Directory $AutoCAD2027Dir
+
+if (-not (Test-Path -LiteralPath (Join-Path $bundleTemplate "PackageContents.xml") -PathType Leaf)) {
+    throw "The bundle template is incomplete: '$bundleTemplate'."
+}
+
+New-Item -ItemType Directory -Path $artifactsRoot -Force | Out-Null
+
+if (Test-Path -LiteralPath $bundle) {
+    Remove-Item -LiteralPath $bundle -Recurse -Force
+}
+
+Copy-Item -LiteralPath $bundleTemplate -Destination $bundle -Recurse -Force
 
 dotnet build $project `
     --configuration Release `

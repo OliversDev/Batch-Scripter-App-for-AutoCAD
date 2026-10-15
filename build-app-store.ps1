@@ -103,6 +103,20 @@ foreach ($fileName in $requiredRibbonFiles) {
     }
 }
 
+# Validate the settings that control merging and tooltip F1 before packaging.
+[xml]$ribbonDefinition = Get-Content -LiteralPath (Join-Path $ribbonSource "RibbonRoot.cui") -Raw
+$tabDefinition = $ribbonDefinition.RibbonRoot.RibbonTabSourceCollection.RibbonTabSource
+if ($tabDefinition.Alias -ne "ID_ADDINSTAB" -or
+    $tabDefinition.DefaultDisplay -ne "AddToWorkspace" -or
+    $tabDefinition.WorkspaceBehavior -ne "MergeTabOnly") {
+    throw "Ribbon must merge into ID_ADDINSTAB with AddToWorkspace and MergeTabOnly."
+}
+[xml]$macroDefinition = Get-Content -LiteralPath (Join-Path $ribbonSource "MenuGroup.cui") -Raw
+$tooltipDefinition = $macroDefinition.MenuGroup.MacroGroup.MenuMacro.Macro.ToolTip
+if ($tooltipDefinition.EnableHelp -ne "false") {
+    throw "Batch Scripter tooltip F1 help must be disabled."
+}
+
 $ribbonWorkRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("BatchScripterCuix_" + [Guid]::NewGuid().ToString("N").Substring(0, 8))
 $ribbonPackageRoot = Join-Path $ribbonWorkRoot "Package"
 $ribbonZip = Join-Path $ribbonWorkRoot "BatchScripter.zip"

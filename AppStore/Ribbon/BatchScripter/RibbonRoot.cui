@@ -23,15 +23,13 @@
     </RibbonPanelSource>
   </RibbonPanelSourceCollection>
   <RibbonTabSourceCollection>
-    <RibbonTabSource Text="Batch Scripter"
+    <RibbonTabSource Text="Add-ins"
                      UID="RBN_TAB_BATCHSCRIPTER"
-                     IsWorkspaceDefault="true"
-                     WorkspaceBehavior="MergeOrAddTab">
+                     DefaultDisplay="AddToWorkspace"
+                     WorkspaceBehavior="MergeTabOnly">
       <ModifiedRev MajorVersion="25" MinorVersion="1" UserVersion="0" />
-      <Name>Batch Scripter</Name>
-      <Aliases>
-        <Alias>ID_ADDINSTAB</Alias>
-      </Aliases>
+      <Name>Add-ins</Name>
+      <Alias>ID_ADDINSTAB</Alias>
       <RibbonPanelSourceReference UID="RBN_REF_BATCHSCRIPTER"
                                   PanelId="RBN_PANEL_BATCHSCRIPTER"
                                   ResizeStyle="Default">

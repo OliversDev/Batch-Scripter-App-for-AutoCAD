@@ -10,8 +10,7 @@
         <HelpString>Open Batch Scripter and run one script across an ordered drawing list.</HelpString>
         <SmallImage Name="BatchScripter16.png" />
         <LargeImage Name="BatchScripter32.png" />
-        <CLICommand>OW:BatchScripter</CLICommand>
-        <ToolTip />
+        <ToolTip CommandName="OW:BatchScripter" EnableHelp="false" />
       </Macro>
     </MenuMacro>
   </MacroGroup>

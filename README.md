@@ -26,7 +26,7 @@ For local bundle testing, place `BatchScripter.bundle` under:
 C:\Program Files\Autodesk\ApplicationPlugins
 ```
 
-Restart AutoCAD. Open the **Plug-Ins** ribbon tab and select **Batch Scripter**, or enter the following command:
+Restart AutoCAD. Open the **Add-ins** ribbon tab and select **Batch Scripter**, or enter the following command:
 
 ```text
 OW:BatchScripter
@@ -131,3 +131,11 @@ Batch Scripter uses licensed Dazzle Pro icons and symbols as part of the Batch S
 <https://dazzleui.pro/>
 
 Autodesk and AutoCAD are registered trademarks of Autodesk, Inc. Batch Scripter is not affiliated with, endorsed by, sponsored by, or supported by Autodesk, Inc.
+
+Ribbon integration uses a direct `Alias` of `ID_ADDINSTAB`,
+`DefaultDisplay="AddToWorkspace"`, and `WorkspaceBehavior="MergeTabOnly"`.
+It merges into the main customization's Add-ins tab without creating a fallback
+tab. The main tab must exist and be enabled in the current workspace.
+Tooltip F1 help is disabled for this button; the regular HTML documentation
+remains included. Autodesk's specific F1 review comment still needs agreement
+from the reviewer if F1 is omitted.

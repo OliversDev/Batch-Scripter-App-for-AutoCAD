@@ -10,7 +10,8 @@
         <HelpString>Open Batch Scripter and run one script across an ordered drawing list.</HelpString>
         <SmallImage Name="BatchScripter16.png" />
         <LargeImage Name="BatchScripter32.png" />
-        <ToolTip CommandName="OW:BatchScripter" EnableHelp="false" />
+        <ToolTip CommandName="OW:BatchScripter" EnableHelp="true"
+                 HelpSource="https://apps.autodesk.com/ACAD_E/en/Detail/HelpDoc?appId=5998927868848485034&amp;appLang=en&amp;os=Win64&amp;mode=preview" />
       </Macro>
     </MenuMacro>
   </MacroGroup>

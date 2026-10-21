@@ -113,8 +113,9 @@ if ($tabDefinition.Alias -ne "ID_ADDINSTAB" -or
 }
 [xml]$macroDefinition = Get-Content -LiteralPath (Join-Path $ribbonSource "MenuGroup.cui") -Raw
 $tooltipDefinition = $macroDefinition.MenuGroup.MacroGroup.MenuMacro.Macro.ToolTip
-if ($tooltipDefinition.EnableHelp -ne "false") {
-    throw "Batch Scripter tooltip F1 help must be disabled."
+$expectedHelpUrl = 'https://apps.autodesk.com/ACAD_E/en/Detail/HelpDoc?appId=5998927868848485034&appLang=en&os=Win64&mode=preview'
+if ($tooltipDefinition.EnableHelp -ne "true" -or $tooltipDefinition.HelpSource -ne $expectedHelpUrl) {
+    throw "Batch Scripter tooltip F1 must be enabled and point to the Autodesk help page."
 }
 
 $ribbonWorkRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("BatchScripterCuix_" + [Guid]::NewGuid().ToString("N").Substring(0, 8))
